@@ -1,11 +1,19 @@
-package thr33go
+package lib
 
 import (
+	"log"
 	"os"
 	"strings"
 
 	"github.com/fatih/color"
 )
+
+func Errlog(err error) {
+	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
+	if err != nil {
+		log.Println(err)
+	}
+}
 
 func ErrExit(err error) {
 	if err != nil {
