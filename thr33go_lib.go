@@ -8,6 +8,15 @@ import (
 	"github.com/fatih/color"
 )
 
+type LogWriter struct {
+}
+
+func (l LogWriter) Write(message []byte) (n int, err error) {
+	c := color.New(color.FgHiMagenta, color.Bold)
+	c.Printf("%s", message)
+	return len(message), nil
+}
+
 func Errlog(err error) {
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 	if err != nil {
@@ -42,6 +51,12 @@ func ReadFileLines(filename string) []string {
 	file, _ := os.ReadFile(filename)
 	file_str := string(file)
 	return strings.Split(file_str, "\n")
+}
+
+func init() {
+	lw := LogWriter{}
+	log.SetFlags(log.Ltime | log.Llongfile)
+	log.SetOutput(lw)
 }
 
 var Red = color.New(color.Bold, color.FgHiRed).PrintFunc()
