@@ -18,17 +18,14 @@ func (l LogWriter) Write(message []byte) (n int, err error) {
 }
 
 func Errlog(err error) {
-	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
 func ErrExit(err error) {
-	if err != nil {
-		Red(err)
-		os.Exit(1)
-	}
+	Errlog(err)
+	os.Exit(1)
 }
 
 func LenCheckRtn(s []string, idx int) string {
