@@ -1,15 +1,17 @@
 package lib
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 )
 
-type LogWriter struct {
-}
+type LogWriter struct{}
 
 func (l LogWriter) Write(message []byte) (n int, err error) {
 	c := color.New(color.FgHiMagenta, color.Bold)
@@ -24,7 +26,9 @@ func Errlog(err error) {
 }
 
 func ErrExit(err error) {
-	Errlog(err)
+	if err != nil {
+		log.Println(err)
+	}
 	os.Exit(1)
 }
 
@@ -48,6 +52,36 @@ func ReadFileLines(filename string) []string {
 	file, _ := os.ReadFile(filename)
 	file_str := string(file)
 	return strings.Split(file_str, "\n")
+}
+
+func ScanTimeout(duration string) (string, error) {
+	d, err := time.ParseDuration(duration)
+	if err != nil {
+		d = 5 * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), d)
+	defer cancel()
+
+	nameCh := make(chan string)
+	errCh := make(chan error)
+
+	go func() {
+		var name string
+		if _, err := fmt.Scan(&name); err != nil {
+			errCh <- err
+			return
+		}
+		nameCh <- name
+	}()
+
+	select {
+	case <-ctx.Done():
+		return "", ctx.Err()
+	case err := <-errCh:
+		return "", err
+	case name := <-nameCh:
+		return name, nil
+	}
 }
 
 func init() {
