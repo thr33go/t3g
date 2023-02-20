@@ -2,6 +2,7 @@ package lib
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +11,14 @@ import (
 
 	"github.com/fatih/color"
 )
+
+func Hex2byte(hexstream string) []byte {
+	src := []byte(hexstream)
+	dst := make([]byte, hex.DecodedLen(len(src)))
+	_, err := hex.Decode(dst, src)
+	Errlog(err)
+	return dst
+}
 
 type LogWriter struct{}
 
