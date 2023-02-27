@@ -6,11 +6,22 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
 )
+
+func Bin2byte(binstream string) []byte {
+	var s string
+	for i := 0; i < len(binstream); i = i + 8 {
+		i64, _ := strconv.ParseInt(binstream[i:i+8], 2, 8)
+		// r = append(r, []byte(string(i64)))
+		s = s + string(i64)
+	}
+	return []byte(s)
+}
 
 func Hex2byte(hexstream string) []byte {
 	src := []byte(hexstream)
@@ -95,7 +106,8 @@ func ScanTimeout(duration string) (string, error) {
 
 func init() {
 	lw := LogWriter{}
-	log.SetFlags(log.Ltime | log.Llongfile)
+	// log.SetFlags(log.Ltime | log.Llongfile)
+	log.SetFlags(log.Ltime)
 	log.SetOutput(lw)
 }
 
