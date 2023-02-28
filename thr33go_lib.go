@@ -10,8 +10,23 @@ import (
 	"strings"
 	"time"
 
+	"github.com/antonmedv/expr"
 	"github.com/fatih/color"
 )
+
+func Expr(expression string) any {
+	program, err := expr.Compile(expression)
+	if err != nil {
+		fmt.Println("compile error:", err)
+		return ""
+	}
+	output, err := expr.Run(program, nil)
+	if err != nil {
+		fmt.Println("runtime error:", err)
+		return ""
+	}
+	return output
+}
 
 func Bin2byte(binstream string) []byte {
 	var s string
