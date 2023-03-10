@@ -63,8 +63,9 @@ func Errlog(err error) {
 func ErrExit(err error) {
 	if err != nil {
 		log.Println(err)
+		os.Exit(1)
 	}
-	os.Exit(1)
+
 }
 
 func LenCheckRtn(s []string, idx int) string {
