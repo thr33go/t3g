@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -39,6 +40,7 @@ func Bin2byte(binstream string) []byte {
 }
 
 func Hex2byte(hexstream string) []byte {
+	hexstream = Re_space.ReplaceAllString(hexstream, "")
 	src := []byte(hexstream)
 	dst := make([]byte, hex.DecodedLen(len(src)))
 	_, err := hex.Decode(dst, src)
@@ -143,3 +145,4 @@ var White = color.New(color.Bold, color.FgHiWhite).PrintFunc()
 var Whiteln = color.New(color.Bold, color.FgHiWhite).PrintlnFunc()
 var Print = color.New(color.FgWhite).PrintFunc()
 var Println = color.New(color.FgWhite).PrintlnFunc()
+var Re_space = *regexp.MustCompile(`\s+`)
