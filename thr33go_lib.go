@@ -19,7 +19,7 @@ import (
 func Set(slice interface{}) interface{} {
 	sliceValue := reflect.ValueOf(slice)
 	if sliceValue.Kind() != reflect.Slice {
-		panic("Input is not a slice")
+		return slice
 	}
 
 	seen := make(map[interface{}]bool)
