@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,6 +15,25 @@ import (
 	"github.com/antonmedv/expr"
 	"github.com/fatih/color"
 )
+
+func Set(slice interface{}) interface{} {
+	sliceValue := reflect.ValueOf(slice)
+	if sliceValue.Kind() != reflect.Slice {
+		panic("Input is not a slice")
+	}
+
+	seen := make(map[interface{}]bool)
+	result := reflect.MakeSlice(sliceValue.Type(), 0, sliceValue.Len())
+
+	for i := 0; i < sliceValue.Len(); i++ {
+		v := sliceValue.Index(i).Interface()
+		if _, ok := seen[v]; !ok {
+			seen[v] = true
+			result = reflect.Append(result, reflect.ValueOf(v))
+		}
+	}
+	return result.Interface()
+}
 
 func Expr(expression string) any {
 	program, err := expr.Compile(expression)
@@ -127,6 +147,9 @@ func init() {
 	// log.SetFlags(log.Ltime | log.Llongfile)
 	log.SetFlags(log.Ltime)
 	log.SetOutput(lw)
+	Alphabet_slice = append(Lowercase, Uppercase...)
+	Word_slice = append(Alphabet_slice, Numbers...)
+	Any_slice = append(Word_slice, Symbols...)
 }
 
 var Red = color.New(color.Bold, color.FgHiRed).PrintFunc()
@@ -146,3 +169,10 @@ var Whiteln = color.New(color.Bold, color.FgHiWhite).PrintlnFunc()
 var Print = color.New(color.FgWhite).PrintFunc()
 var Println = color.New(color.FgWhite).PrintlnFunc()
 var Re_space = *regexp.MustCompile(`\s+`)
+var Uppercase []string = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+var Lowercase []string = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+var Numbers []string = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+var Symbols []string = []string{"!", `"`, "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", `[`, `\`, `]`, `^`, `_`, "`", `{`, `|`, `}`}
+var Alphabet_slice []string
+var Word_slice []string
+var Any_slice []string
