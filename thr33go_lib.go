@@ -37,6 +37,19 @@ func (f *FileList) FH(filename string) *os.File {
 	return fileHandle
 }
 
+func (f *FileList) Clear() {
+	for k, v := range f.Filemap {
+		err := v.Close()
+		if err != nil {
+			continue
+		}
+		info, _ := os.Stat(k)
+		if info.Size() == 0 {
+			os.Remove(k)
+		}
+	}
+}
+
 func Set(slice interface{}) interface{} {
 	sliceValue := reflect.ValueOf(slice)
 	if sliceValue.Kind() != reflect.Slice {
