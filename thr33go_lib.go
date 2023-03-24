@@ -16,6 +16,27 @@ import (
 	"github.com/fatih/color"
 )
 
+type FileList struct {
+	Filemap map[string]*os.File
+}
+
+func (f *FileList) FH(filename string) *os.File {
+	if f.Filemap == nil {
+		f.Filemap = make(map[string]*os.File)
+	}
+	fileHandle, ok := f.Filemap[filename]
+	if !ok {
+		fileHandle, err := os.Create(filename)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		f.Filemap[filename] = fileHandle
+		return fileHandle
+	}
+	return fileHandle
+}
+
 func Set(slice interface{}) interface{} {
 	sliceValue := reflect.ValueOf(slice)
 	if sliceValue.Kind() != reflect.Slice {
@@ -38,12 +59,12 @@ func Set(slice interface{}) interface{} {
 func Expr(expression string) any {
 	program, err := expr.Compile(expression)
 	if err != nil {
-		fmt.Println("compile error:", err)
+		fmt.Println(expression, "compile error:", err)
 		return ""
 	}
 	output, err := expr.Run(program, nil)
 	if err != nil {
-		fmt.Println("runtime error:", err)
+		fmt.Println(expression, "runtime error:", err)
 		return ""
 	}
 	return output
