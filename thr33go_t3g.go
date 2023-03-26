@@ -1,4 +1,4 @@
-package lib
+package t3g
 
 import (
 	"context"
@@ -50,6 +50,15 @@ func (f *FileList) Clear() {
 	}
 }
 
+func File(filename string) *os.File {
+	h := t3gFl.FH(filename)
+	return h
+}
+
+func FileClear() {
+	t3gFl.Clear()
+}
+
 func Set(slice interface{}) interface{} {
 	sliceValue := reflect.ValueOf(slice)
 	if sliceValue.Kind() != reflect.Slice {
@@ -88,7 +97,7 @@ func Bin2byte(binstream string) []byte {
 	for i := 0; i < len(binstream); i = i + 8 {
 		i64, _ := strconv.ParseInt(binstream[i:i+8], 2, 8)
 		// r = append(r, []byte(string(i64)))
-		s = s + string(i64)
+		s = s + fmt.Sprint(i64)
 	}
 	return []byte(s)
 }
@@ -98,7 +107,7 @@ func Hex2byte(hexstream string) []byte {
 	src := []byte(hexstream)
 	dst := make([]byte, hex.DecodedLen(len(src)))
 	_, err := hex.Decode(dst, src)
-	Errlog(err)
+	ErrLog(err)
 	return dst
 }
 
@@ -110,7 +119,7 @@ func (l LogWriter) Write(message []byte) (n int, err error) {
 	return len(message), nil
 }
 
-func Errlog(err error) {
+func ErrLog(err error) {
 	if err != nil {
 		log.Println(err)
 	}
@@ -188,20 +197,32 @@ func init() {
 
 var Red = color.New(color.Bold, color.FgHiRed).PrintFunc()
 var Redln = color.New(color.Bold, color.FgHiRed).PrintlnFunc()
+var Redf = color.New(color.Bold, color.FgHiRed).PrintfFunc()
+var RedS = color.New(color.Bold, color.FgHiRed).SprintFunc()
 var Green = color.New(color.Bold, color.FgHiGreen).PrintFunc()
 var Greenln = color.New(color.Bold, color.FgHiGreen).PrintlnFunc()
+var Greenf = color.New(color.Bold, color.FgHiGreen).PrintfFunc()
+var GreenS = color.New(color.Bold, color.FgHiGreen).SprintFunc()
 var Yellow = color.New(color.Bold, color.FgHiYellow).PrintFunc()
 var Yellowln = color.New(color.Bold, color.FgHiYellow).PrintlnFunc()
+var Yellowf = color.New(color.Bold, color.FgHiYellow).PrintfFunc()
+var YellowS = color.New(color.Bold, color.FgHiYellow).SprintFunc()
 var Blue = color.New(color.Bold, color.FgHiBlue).PrintFunc()
 var Blueln = color.New(color.Bold, color.FgHiBlue).PrintlnFunc()
+var Bluef = color.New(color.Bold, color.FgHiBlue).PrintfFunc()
+var BlueS = color.New(color.Bold, color.FgHiBlue).SprintFunc()
 var Magenta = color.New(color.Bold, color.FgHiMagenta).PrintFunc()
 var Magentaln = color.New(color.Bold, color.FgHiMagenta).PrintlnFunc()
+var Magentaf = color.New(color.Bold, color.FgHiMagenta).PrintfFunc()
+var MagentaS = color.New(color.Bold, color.FgHiMagenta).SprintFunc()
 var Cyan = color.New(color.Bold, color.FgHiCyan).PrintFunc()
 var Cyanln = color.New(color.Bold, color.FgHiCyan).PrintlnFunc()
+var Cyanf = color.New(color.Bold, color.FgHiCyan).PrintfFunc()
+var CyanS = color.New(color.Bold, color.FgHiCyan).SprintFunc()
 var White = color.New(color.Bold, color.FgHiWhite).PrintFunc()
 var Whiteln = color.New(color.Bold, color.FgHiWhite).PrintlnFunc()
-var Print = color.New(color.FgWhite).PrintFunc()
-var Println = color.New(color.FgWhite).PrintlnFunc()
+var Whitef = color.New(color.Bold, color.FgHiWhite).PrintfFunc()
+var WhiteS = color.New(color.Bold, color.FgHiWhite).SprintFunc()
 var Re_space = *regexp.MustCompile(`\s+`)
 var Uppercase []string = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 var Lowercase []string = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
@@ -210,3 +231,4 @@ var Symbols []string = []string{"!", `"`, "#", "$", "%", "&", "'", "(", ")", "*"
 var Alphabet_slice []string
 var Word_slice []string
 var Any_slice []string
+var t3gFl FileList
