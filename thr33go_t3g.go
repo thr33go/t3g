@@ -51,12 +51,12 @@ func (f *FileList) Clear() {
 }
 
 func File(filename string) *os.File {
-	h := t3gFl.FH(filename)
+	h := FLt3g.FH(filename)
 	return h
 }
 
 func FileClear() {
-	t3gFl.Clear()
+	FLt3g.Clear()
 }
 
 func Set(slice interface{}) interface{} {
@@ -231,4 +231,4 @@ var Symbols []string = []string{"!", `"`, "#", "$", "%", "&", "'", "(", ")", "*"
 var Alphabet_slice []string
 var Word_slice []string
 var Any_slice []string
-var t3gFl FileList
+var FLt3g FileList
