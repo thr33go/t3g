@@ -102,6 +102,15 @@ func Bin2byte(binstream string) []byte {
 	return []byte(s)
 }
 
+func Bin2str(binstream string, digits int) string {
+	var s string
+	for i := 0; i < len(binstream); i = i + digits {
+		i64, _ := strconv.ParseInt(binstream[i:i+digits], 2, 8)
+		s = s + fmt.Sprint(i64) + " "
+	}
+	return s
+}
+
 func Hex2byte(hexstream string) []byte {
 	hexstream = Re_space.ReplaceAllString(hexstream, "")
 	src := []byte(hexstream)
