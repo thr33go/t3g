@@ -14,6 +14,7 @@ import (
 
 	"github.com/antonmedv/expr"
 	"github.com/fatih/color"
+	"github.com/kylelemons/godebug/diff"
 )
 
 type FileList struct {
@@ -192,6 +193,20 @@ func ScanTimeout(duration string) (string, error) {
 	case name := <-nameCh:
 		return name, nil
 	}
+}
+
+func diffAdded(a, b string) string {
+	a_slice := strings.Split(a, "\n")
+	b_slice := strings.Split(b, "\n")
+	chunk := diff.DiffChunks(a_slice, b_slice)
+	added := ""
+	for _, c := range chunk {
+		if c.Added == nil {
+			continue
+		}
+		added += strings.Join(c.Added, "") + "\n"
+	}
+	return added
 }
 
 func init() {
