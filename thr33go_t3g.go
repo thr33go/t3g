@@ -195,7 +195,7 @@ func ScanTimeout(duration string) (string, error) {
 	}
 }
 
-func diffAdded(a, b string) string {
+func DiffAdded(a, b string) string {
 	a_slice := strings.Split(a, "\n")
 	b_slice := strings.Split(b, "\n")
 	chunk := diff.DiffChunks(a_slice, b_slice)
