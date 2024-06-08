@@ -121,6 +121,36 @@ func Hex2byte(hexstream string) []byte {
 	return dst
 }
 
+func XorHex(hexstream1, hexstream2 string) (string, error) {
+	bytes1, err := hex.DecodeString(hexstream1)
+	if err != nil {
+		return "", err
+	}
+	bytes2, err := hex.DecodeString(hexstream2)
+	if err != nil {
+		return "", err
+	}
+
+	var long, short []byte
+	if len(bytes1) > len(bytes2) {
+		long, short = bytes1, bytes2
+	} else {
+		long, short = bytes2, bytes1
+	}
+
+	extendedShort := make([]byte, len(long))
+	for i := range long {
+		extendedShort[i] = short[i%len(short)]
+	}
+
+	result := make([]byte, len(long))
+	for i := range long {
+		result[i] = long[i] ^ extendedShort[i]
+	}
+
+	return hex.EncodeToString(result), nil
+}
+
 type LogWriter struct{}
 
 func (l LogWriter) Write(message []byte) (n int, err error) {
