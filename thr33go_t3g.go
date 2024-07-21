@@ -151,6 +151,14 @@ func XorHex(hexstream1, hexstream2 string) (string, error) {
 	return hex.EncodeToString(result), nil
 }
 
+func ReverseString(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
+}
+
 type LogWriter struct{}
 
 func (l LogWriter) Write(message []byte) (n int, err error) {
@@ -247,6 +255,10 @@ func init() {
 	Alphabet_slice = append(Lowercase, Uppercase...)
 	Word_slice = append(Alphabet_slice, Numbers...)
 	Any_slice = append(Word_slice, Symbols...)
+}
+
+func GrayS(contents string) string {
+	return "\033[0;90m" + contents + "\033[0m"
 }
 
 var Red = color.New(color.Bold, color.FgHiRed).PrintFunc()
